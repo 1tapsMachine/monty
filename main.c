@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	open_file(argv[1]);
-	free_nodes();
+	delete_node();
 	return (0);
 }
 
@@ -39,32 +39,32 @@ stack_t *create_node(int n)
 }
 
 /**
- * free_nodes - Frees nodes in the stack.
+ * delete_node - Frees nodes in the stack.
  */
-void free_nodes(void)
+void delete_node(void)
 {
-	stack_t *tmp;
+	stack_t *temp_var;
 
 	if (head == NULL)
 		return;
 
 	while (head != NULL)
 	{
-		tmp = head;
+		temp_var = head;
 		head = head->next;
-		free(tmp);
+		free(temp_var);
 	}
 }
 
 
 /**
- * add_to_queue - Adds a node to the queue.
+ * append_to_queue - Adds a node to the queue.
  * @new_node: Pointer to the new node.
  * @ln: line number of the opcode.
  */
-void add_to_queue(stack_t **new_node, __attribute__((unused))unsigned int ln)
+void append_to_queue(stack_t **new_node, __attribute__((unused))unsigned int ln)
 {
-	stack_t *tmp;
+	stack_t *temp_var;
 
 	if (new_node == NULL || *new_node == NULL)
 		exit(EXIT_FAILURE);
@@ -73,11 +73,11 @@ void add_to_queue(stack_t **new_node, __attribute__((unused))unsigned int ln)
 		head = *new_node;
 		return;
 	}
-	tmp = head;
-	while (tmp->next != NULL)
-		tmp = tmp->next;
+	temp_var = head;
+	while (temp_var->next != NULL)
+		temp_var = temp_var->next;
 
-	tmp->next = *new_node;
-	(*new_node)->prev = tmp;
+	temp_var->next = *new_node;
+	(*new_node)->prev = temp_var;
 
 }

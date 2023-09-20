@@ -32,14 +32,14 @@ void read_file(FILE *fd)
 
 	for (line_number = 1; getline(&buffer, &len, fd) != -1; line_number++)
 	{
-		format = parse_line(buffer, line_number, format);
+		format = get_line(buffer, line_number, format);
 	}
 	free(buffer);
 }
 
 
 /**
- * parse_line - Separates each line into tokens to determine
+ * get_line - Separates each line into tokens to determine
  * which function to call
  * @buffer: line from the file
  * @line_number: line number
@@ -48,7 +48,7 @@ void read_file(FILE *fd)
  * Return: Returns 0 if the opcode is stack. 1 if queue.
  */
 
-int parse_line(char *buffer, int line_number, int format)
+int get_line(char *buffer, int line_number, int format)
 {
 	char *opcode, *value;
 	const char *delim = "\n ";
@@ -66,12 +66,12 @@ int parse_line(char *buffer, int line_number, int format)
 	if (strcmp(opcode, "queue") == 0)
 		return (1);
 
-	find_func(opcode, value, line_number, format);
+	get_function(opcode, value, line_number, format);
 	return (format);
 }
 
 /**
- * find_func - find the appropriate function for the opcode
+ * get_function - find the appropriate function for the opcode
  * @opcode: opcode
  * @value: argument of opcode
  * @format:  storage format. If 0 Nodes will be entered as a stack.
@@ -79,15 +79,15 @@ int parse_line(char *buffer, int line_number, int format)
  * if 1 nodes will be entered as a queue.
  * Return: void
  */
-void find_func(char *opcode, char *value, int ln, int format)
+void get_function(char *opcode, char *value, int ln, int format)
 {
 	int i;
 	int flag;
 
 	instruction_t func_list[] = {
-		{"push", add_to_stack},
+		{"push", append_to_stack},
 		{"pall", print_stack},
-		{"pint", print_top},
+		{"pint", get_top},
 		{"pop", pop_top},
 		{"nop", nop},
 		{"swap", swap_nodes},
@@ -153,7 +153,7 @@ void call_fun(op_func func, char *op, char *val, int ln, int format)
 		if (format == 0)
 			func(&node, ln);
 		if (format == 1)
-			add_to_queue(&node, ln);
+			append_to_queue(&node, ln);
 	}
 	else
 		func(&head, ln);
