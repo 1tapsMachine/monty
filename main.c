@@ -1,4 +1,5 @@
 #include "monty.h"
+stack_t *head = NULL;
 
 /**
  * main - entry point
@@ -15,16 +16,16 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	open_file(argv[1]);
-	delete_nodes();
+	free_nodes();
 	return (0);
 }
 
 /**
  * create_node - Creates a node.
- * @data: Number to go inside the node.
- * Return: Upon success, a pointer to the node. Otherwise NULL.
+ * @n: Number to go inside the node.
+ * Return: Upon sucess a pointer to the node. Otherwise NULL.
  */
-stack_t *create_node(int data)
+stack_t *create_node(int n)
 {
 	stack_t *node;
 
@@ -33,49 +34,50 @@ stack_t *create_node(int data)
 		err(4);
 	node->next = NULL;
 	node->prev = NULL;
-	node->n = data;
+	node->n = n;
 	return (node);
 }
 
 /**
- * delete_nodes - Frees nodes in the stack.
+ * free_nodes - Frees nodes in the stack.
  */
-void delete_nodes(void)
+void free_nodes(void)
 {
-	stack_t *temp;
+	stack_t *tmp;
 
-	if (stack_head == NULL)
+	if (head == NULL)
 		return;
 
-	while (stack_head != NULL)
+	while (head != NULL)
 	{
-		temp = stack_head;
-		stack_head = stack_head->next;
-		free(temp);
+		tmp = head;
+		head = head->next;
+		free(tmp);
 	}
 }
 
+
 /**
- * enqueue_node - Adds a node to the queue.
+ * add_to_queue - Adds a node to the queue.
  * @new_node: Pointer to the new node.
- * @line_num: line number of the opcode.
+ * @ln: line number of the opcode.
  */
-void enqueue_node(stack_t **new_node,
-__attribute__((unused))unsigned int line_num)
+void add_to_queue(stack_t **new_node, __attribute__((unused))unsigned int ln)
 {
-	stack_t *temp;
+	stack_t *tmp;
 
 	if (new_node == NULL || *new_node == NULL)
 		exit(EXIT_FAILURE);
-	if (stack_head == NULL)
+	if (head == NULL)
 	{
-		stack_head = *new_node;
+		head = *new_node;
 		return;
 	}
-	temp = stack_head;
-	while (temp->next != NULL)
-		temp = temp->next;
+	tmp = head;
+	while (tmp->next != NULL)
+		tmp = tmp->next;
 
-	temp->next = *new_node;
-	(*new_node)->prev = temp;
+	tmp->next = *new_node;
+	(*new_node)->prev = tmp;
+
 }
